@@ -1,0 +1,16 @@
+name: KelvinWakes
+
+channels:
+  - conda-forge
+
+dependencies:
+  - python=3.8
+  - pip
+  - pip:
+    - ploomber
+    - pandas
+    - scikit-learn
+    # if using S3...
+    # - boto3
+    # if using Google Cloud Storage...
+    # - google-cloud-storage
