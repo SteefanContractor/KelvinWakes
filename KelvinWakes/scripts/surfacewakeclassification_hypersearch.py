@@ -59,6 +59,7 @@ from sklearn_evaluation import plot
 import atexit
 from unittest.mock import Mock
 import mlflow
+from mlflow.exceptions import MlflowException
 
 if track:
     print('tracking with mlflow...')
