@@ -53,7 +53,6 @@ print(model_params)
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.layers import Conv2D, MaxPool2D, Flatten, Dense, Rescaling
-import itertools
 import matplotlib.pyplot as plt
 from sklearn_evaluation import plot
 import atexit
@@ -113,9 +112,9 @@ def conv_block(x, filters, kernel_size, activation, padding='same', convstrides=
     # x = Dropout(dropout)(x)
     return x
 
-def build_model(num_filters, kernel_size, dense_units, activation='relu', summary=True):
+def build_model(input_shape, num_filters, kernel_size, dense_units, activation='relu', summary=True):
     num_blocks=len(num_filters)
-    inputs = tf.keras.Input(shape=SHAPE.append(1)) # append channel dim to image shape
+    inputs = tf.keras.Input(shape=input_shape)
     x = Rescaling(1/255.)(inputs)
     for i in range(num_blocks):
         x = conv_block(x, 
@@ -152,7 +151,7 @@ print(run.info.run_id)
 
 # +
 BATCH_SIZE=16
-SHAPE=(128,128) # (256,256) or use the shape variable above
+SHAPE=(128,128,1) # (256,256) 
 TRAIN_TEST_SPLIT=0.9
 TRAIN_VAL_SPLIT=0.8
 SEED=202203
@@ -171,7 +170,7 @@ mlflow.log_params(ds_params)
 
 # +
 imgdata = tf.keras.utils.image_dataset_from_directory("/srv/scratch/kelvinwakes/imgdata/ship_wake_photos8", 
-                                                      image_size=SHAPE, 
+                                                      image_size=SHAPE[:2], 
                                                       color_mode='grayscale',
                                                       batch_size=BATCH_SIZE, 
                                                       seed=SEED,
@@ -188,10 +187,11 @@ train_ds = train_ds.cache().prefetch(buffer_size=AUTOTUNE)
 val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
 test_ds = test_ds.cache().prefetch(buffer_size=AUTOTUNE)
 len(train_ds), len(val_ds), len(test_ds)
+# -
+
+model = build_model(SHAPE, num_filters, kernel_size, dense_units)
 
 # +
-model = build_model(num_filters, kernel_size, dense_units)
-
 model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=LR),
               loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
               metrics=['accuracy']
