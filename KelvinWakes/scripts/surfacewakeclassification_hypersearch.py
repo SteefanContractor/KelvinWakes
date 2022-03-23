@@ -208,5 +208,6 @@ history = model.fit(
 val_pred = np.argmax(model.predict(val_ds), axis=1)
 val_labels = np.concatenate([y for x, y in val_ds], axis=0) 
 CLASS = ['Kelvin', 'No Kelvin']
-fig = plot.confusion_matrix(val_labels, val_pred, CLASS)
+fig, ax = plt.subplots()
+plot.confusion_matrix(val_labels, val_pred, CLASS, ax=ax)
 mlflow.log_figure(fig, "cm.png")
