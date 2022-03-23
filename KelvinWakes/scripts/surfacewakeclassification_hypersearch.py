@@ -71,9 +71,6 @@ else:
     print('tracking skipped...')
     mlflow = Mock()
 
-# Enable auto-logging to MLflow to capture TensorBoard metrics.
-mlflow.tensorflow.autolog()
-
 
 # +
 def train_val_test_split(ds, ds_size, train_test_split=0.9, train_val_split=0.8, val_shuffle=False):
@@ -148,6 +145,10 @@ run = mlflow.start_run(experiment_id=experiment_id)
 
 # + tags=["mlflow-run-id"]
 print(run.info.run_id)
+# -
+
+# Enable auto-logging to MLflow to capture TensorBoard metrics.
+mlflow.tensorflow.autolog()
 
 # +
 BATCH_SIZE=16
