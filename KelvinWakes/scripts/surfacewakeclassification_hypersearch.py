@@ -58,6 +58,7 @@ import matplotlib.pyplot as plt
 from sklearn_evaluation import plot
 import atexit
 from unittest.mock import Mock
+import mlflow
 
 if track:
     print('tracking with mlflow...')
