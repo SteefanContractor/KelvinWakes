@@ -1,6 +1,17 @@
 tasks:
   # Add tasks here...
-
+  - source: scripts/surfacewakeclassification_hypersearch.py
+    name: surfacewakeclassification_hypersearch-
+    product: products/surfacewakeclassification_hypersearch.ipynb
+    grid:
+      - num_filters: [[8,16], [8,32], [16,64], [8,16,32], [16,32,64]]
+        kernel_size: [3, 7]
+        dense_units: [128, 256, 512]
+        params_names: [[num_filters, kernel_size, dense_units]]
+        track: '{{track}}'
+        mlflow_tracking_uri: '{{mlflow_tracking_uri}}'
+    on_finish: hooks.store_report
+    
   # Example
   # - source: path/to/script.py
   #   product: products/report.ipynb
