@@ -157,7 +157,7 @@ TRAIN_TEST_SPLIT=0.9
 TRAIN_VAL_SPLIT=0.8
 SEED=202203
 LR=0.0005
-EPOCHS = 1
+EPOCHS = 3
 
 # log original model_params created from pipeline.yaml params and then
 # create a new ds_params dict with the above params to log
@@ -200,6 +200,7 @@ model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=LR),
 
 history = model.fit(
   train_ds,
+  batch_size=BATCH_SIZE,
   validation_data=val_ds,
   epochs=EPOCHS,
   verbose=2
